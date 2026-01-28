@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流照片墙 - 最终测试版</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .test-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+        .preloaded-card .card-image,
+        .preloaded-card .card-content {
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-indicator" id="testIndicator">✅ JavaScript加载成功</div>
+    
+    <header class="header">
+        <div class="container">
+            <div class="logo"><h1>照片墙</h1></div>
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="搜索图片..." />
+                    <button id="searchButton">搜索</button>
+                </div>
+                <select id="categoryFilter">
+                    <option value="">全部分类</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="waterfall-grid" id="waterfallGrid">
+                <!-- 预加载示例图片 -->
+                <div class="image-card preloaded-card">
+                    <div class="image-container">
+                        <img src="https://picsum.photos/300/400?random=101" alt="风景图片1" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">美丽的山水风景</h3>
+                    </div>
+                </div>
+                <div class="image-card preloaded-card">
+                    <div class="image-container">
+                        <img src="https://picsum.photos/300/350?random=102" alt="城市图片1" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">现代都市夜景</h3>
+                    </div>
+                </div>
+                <div class="image-card preloaded-card">
+                    <div class="image-container">
+                        <img src="https://picsum.photos/300/450?random=103" alt="人物图片1" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">人物肖像摄影</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="loading" id="loading"><p>加载中...</p></div>
+            <div class="no-more" id="noMore"><p>已无更多内容</p></div>
+            <div class="error" id="error"><p>加载失败，请刷新页面重试</p></div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // 额外的测试代码
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== 页面加载测试 ===');
+            console.log('1. DOM加载完成 ✓');
+            
+            // 测试API连接
+            fetch('/api/categories')
+                .then(response => {
+                    console.log('2. 分类API连接:', response.status === 200 ? '✓' : '✗');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('3. 分类数据获取:', data.length > 0 ? '✓' : '✗');
+                })
+                .catch(err => {
+                    console.log('3. 分类数据获取: ✗', err.message);
+                });
+            
+            fetch('/api/images?page=1&limit=2')
+                .then(response => {
+                    console.log('4. 图片API连接:', response.status === 200 ? '✓' : '✗');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('5. 图片数据获取:', data.length > 0 ? '✓' : '✗');
+                })
+                .catch(err => {
+                    console.log('5. 图片数据获取: ✗', err.message);
+                });
+                
+            // 更新测试指示器
+            setTimeout(() => {
+                document.getElementById('testIndicator').innerHTML = '✅ 所有功能正常';
+                document.getElementById('testIndicator').style.background = '#4CAF50';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

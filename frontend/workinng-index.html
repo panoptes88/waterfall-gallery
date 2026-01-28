@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流照片墙</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo"><h1>照片墙</h1></div>
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="搜索图片..." />
+                    <button id="searchButton">搜索</button>
+                </div>
+                <select id="categoryFilter">
+                    <option value="">全部分类</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="waterfall-grid" id="waterfallGrid">
+                <!-- 预加载一些图片作为示例 -->
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://picsum.photos/300/400?random=1" alt="示例图片1" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">示例图片1</h3>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://picsum.photos/300/350?random=2" alt="示例图片2" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">示例图片2</h3>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="image-container">
+                        <img src="https://picsum.photos/300/450?random=3" alt="示例图片3" class="card-image">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">示例图片3</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="loading" id="loading"><p>加载中...</p></div>
+            <div class="no-more" id="noMore"><p>已无更多内容</p></div>
+            <div class="error" id="error"><p>加载失败，请刷新页面重试</p></div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

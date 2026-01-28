@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流照片墙</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .test-card {
+            border: 2px solid red;
+            padding: 10px;
+            margin: 10px;
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo"><h1>照片墙</h1></div>
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="搜索图片..." />
+                    <button id="searchButton">搜索</button>
+                </div>
+                <select id="categoryFilter">
+                    <option value="">全部分类</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="waterfall-grid" id="waterfallGrid">
+                <div class="test-card">如果看到这个红色框，说明HTML正常加载</div>
+            </div>
+            <div class="loading" id="loading"><p>加载中...</p></div>
+            <div class="no-more" id="noMore"><p>已无更多内容</p></div>
+            <div class="error" id="error"><p>加载失败，请刷新页面重试</p></div>
+        </div>
+    </main>
+
+    <script>
+        console.log('测试脚本开始执行');
+        
+        // 简化版的图片加载函数
+        async function loadImagesSimple() {
+            console.log('loadImagesSimple 函数被调用');
+            
+            const grid = document.getElementById('waterfallGrid');
+            if (!grid) {
+                console.error('找不到 waterfallGrid 元素');
+                return;
+            }
+            
+            try {
+                console.log('开始API请求');
+                const response = await fetch('/api/images?page=1&limit=6');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP错误: ${response.status}`);
+                }
+                
+                const images = await response.json();
+                console.log('获取到图片:', images.length, '张');
+                
+                // 清空测试内容
+                grid.innerHTML = '';
+                
+                // 创建图片卡片
+                images.forEach(image => {
+                    const card = document.createElement('div');
+                    card.className = 'image-card';
+                    card.innerHTML = `
+                        <div class="image-container">
+                            <img src="${image.image_url}" alt="${image.title}" class="card-image" style="width: 100%; height: auto;">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">${image.title}</h3>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                
+                console.log('渲染完成，创建了', grid.children.length, '个卡片');
+                
+            } catch (error) {
+                console.error('加载图片失败:', error);
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded 事件触发');
+            loadImagesSimple();
+        });
+        
+        // 作为额外保险，也添加window.onload
+        window.addEventListener('load', function() {
+            console.log('window.load 事件触发');
+            setTimeout(loadImagesSimple, 1000); // 延迟1秒执行
+        });
+        
+        console.log('测试脚本加载完成');
+    </script>
+</body>
+</html>

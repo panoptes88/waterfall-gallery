@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流照片墙 - 灵感发现</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>&nbsp;</h1> <!-- 留空或显示简洁图标 -->
+            </div>
+            <!-- 主题切换 -->
+            <div class="theme-toggle">
+                <button id="themeToggle" aria-label="切换主题">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+            <!-- 搜索和分类区域 -->
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="搜索图片..." />
+                    <button id="searchButton">搜索</button>
+                </div>
+                <select id="categoryFilter">
+                    <option value="">全部分类</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main">
+        <div class="container">
+            <!-- 瀑布流网格 -->
+            <div class="waterfall-grid" id="waterfallGrid">
+                <!-- 图片卡片将通过JavaScript动态加载 -->
+            </div>
+
+            <!-- 加载状态 -->
+            <div class="loading" id="loading">
+                <p>加载中...</p>
+            </div>
+
+            <!-- 无更多内容提示 -->
+            <div class="no-more" id="noMore">
+                <p>已无更多内容</p>
+            </div>
+
+            <!-- 错误提示 -->
+            <div class="error" id="error">
+                <p>加载失败，请刷新页面重试</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 图片模态框 -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+    
+    <!-- 图片详情面板 -->
+    <div id="imageDetailsPanel" class="image-details-panel" style="display: none;">
+        <h3 id="detailTitle">标题</h3>
+        <p id="detailDescription">描述</p>
+        <p id="detailButtonText">按钮文字</p>
+        <p id="detailDate">日期</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

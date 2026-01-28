@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面</title>
+</head>
+<body>
+    <h1>JavaScript测试</h1>
+    <div id="test-results"></div>
+    <div id="waterfallGrid"></div>
+    
+    <script>
+        // 测试函数
+        async function testLoadImages() {
+            const results = document.getElementById('test-results');
+            results.innerHTML += '<p>开始测试...</p>';
+            
+            try {
+                // 测试API调用
+                results.innerHTML += '<p>调用API...</p>';
+                const response = await fetch('/api/images?page=1&limit=3');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const images = await response.json();
+                results.innerHTML += `<p>获取到 ${images.length} 张图片</p>`;
+                
+                // 测试DOM操作
+                const grid = document.getElementById('waterfallGrid');
+                results.innerHTML += `<p>Grid元素存在: ${!!grid}</p>`;
+                
+                // 测试渲染
+                images.forEach(image => {
+                    const card = document.createElement('div');
+                    card.className = 'image-card';
+                    card.innerHTML = `<img src="${image.image_url}" alt="${image.title}" style="width: 200px; height: auto;">`;
+                    grid.appendChild(card);
+                });
+                
+                results.innerHTML += `<p>渲染完成，共创建 ${grid.children.length} 个卡片</p>`;
+                
+            } catch (error) {
+                results.innerHTML += `<p style="color: red;">错误: ${error.message}</p>`;
+            }
+        }
+        
+        // 页面加载完成后执行测试
+        document.addEventListener('DOMContentLoaded', testLoadImages);
+    </script>
+</body>
+</html>

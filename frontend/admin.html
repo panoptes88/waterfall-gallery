@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 瀑布流照片墙</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 登录页面样式 */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 2rem;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-form {
+            margin-top: 2rem;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #0066ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #0052cc;
+        }
+
+        .login-error {
+            color: #ff4444;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        /* 主管理页面样式 */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-button {
+            padding: 0.5rem 1rem;
+            background-color: #ff4444;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #cc0000;
+        }
+
+        /* 隐藏元素 */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>📸 管理后台</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- 登录页面 -->
+    <div class="login-container" id="loginContainer">
+        <div class="admin-header">
+            <h1>管理员登录</h1>
+            <p>请输入您的用户名和密码</p>
+        </div>
+
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required placeholder="请输入用户名">
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required placeholder="请输入密码">
+            </div>
+
+            <button type="submit" class="login-button">登录</button>
+        </form>
+
+        <div class="login-error" id="loginError">用户名或密码错误</div>
+    </div>
+
+    <!-- 主管理页面 -->
+    <main class="main hidden" id="adminMain">
+        <div class="admin-container">
+            <!-- 页面标题和用户信息 -->
+            <div class="admin-header">
+                <div>
+                    <h1>管理图片</h1>
+                    <p>添加新图片或管理现有图片</p>
+                </div>
+                <div class="user-info">
+                    <span id="usernameDisplay">管理员</span>
+                    <button class="logout-button" id="logoutButton">退出登录</button>
+                </div>
+            </div>
+
+            <!-- 添加图片表单 -->
+            <form class="image-form" id="imageForm">
+                <div class="form-group">
+                    <label for="uploadType">上传方式</label>
+                    <select id="uploadType" name="uploadType" onchange="toggleUploadMethod()">
+                        <option value="url">URL链接</option>
+                        <option value="file">上传文件</option>
+                    </select>
+                </div>
+
+                <div id="urlUploadSection">
+                    <div class="form-group">
+                        <label for="imageUrl">图片URL</label>
+                        <input type="url" id="imageUrl" name="image_url" placeholder="请输入图片URL">
+                    </div>
+                </div>
+
+                <div id="fileUploadSection" style="display: none;">
+                    <div class="form-group">
+                        <label for="imageFile">选择图片文件</label>
+                        <input type="file" id="imageFile" name="image" accept="image/*" onchange="previewImage(this)">
+                    </div>
+                    <div id="imagePreview" style="margin-top: 10px;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">标题</label>
+                    <input type="text" id="title" name="title" placeholder="请输入标题">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">描述</label>
+                    <textarea id="description" name="description" placeholder="请输入描述"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="buttonText">按钮文字</label>
+                    <input type="text" id="buttonText" name="button_text" placeholder="请输入按钮文字（默认：做同款）">
+                </div>
+
+                <button type="submit" class="submit-button">添加图片</button>
+            </form>
+
+            <!-- 图片列表 -->
+            <div class="images-list">
+                <h2>现有图片</h2>
+                <div id="imagesList">
+                    <!-- 图片列表将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>

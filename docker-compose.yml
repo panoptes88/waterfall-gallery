@@ -1,0 +1,17 @@
+services:
+  waterfall-gallery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:3000"
+    volumes:
+      - uploads:/app/uploads
+      - database:/app/backend
+    environment:
+      - PORT=3000
+    restart: unless-stopped
+
+volumes:
+  uploads:
+  database:

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript执行测试</title>
+</head>
+<body>
+    <h1>JavaScript执行测试</h1>
+    <div id="status">初始状态</div>
+    <div id="results"></div>
+    <div id="waterfallGrid"></div>
+    
+    <script>
+        // 立即执行的测试
+        document.getElementById('status').innerHTML = 'JavaScript已执行';
+        
+        // DOM加载完成测试
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('status').innerHTML += '<br>DOMContentLoaded事件触发';
+            
+            // API测试
+            fetch('/api/images?page=1&limit=3')
+                .then(response => {
+                    document.getElementById('status').innerHTML += '<br>API响应状态: ' + response.status;
+                    return response.json();
+                })
+                .then(images => {
+                    document.getElementById('status').innerHTML += '<br>获取到 ' + images.length + ' 张图片';
+                    
+                    // 渲染测试
+                    const grid = document.getElementById('waterfallGrid');
+                    images.forEach(image => {
+                        const card = document.createElement('div');
+                        card.style.border = '1px solid #ccc';
+                        card.style.padding = '10px';
+                        card.style.margin = '10px';
+                        card.innerHTML = `
+                            <img src="${image.image_url}" style="width: 150px; height: auto;">
+                            <h3>${image.title}</h3>
+                            <p>${image.description}</p>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    document.getElementById('status').innerHTML += '<br>渲染完成，创建了 ' + grid.children.length + ' 个卡片';
+                })
+                .catch(error => {
+                    document.getElementById('status').innerHTML += '<br>错误: ' + error.message;
+                });
+        });
+    </script>
+</body>
+</html>
